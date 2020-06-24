@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.extraStats {
+    width: 100vw;
+    height: 100vh;
+    transition: 0.5s ease;
+    background-color: rgba(0, 6, 24, 0.5);
+    position: absolute;
+    z-index: 30;
+    right: 100vw;
+}
+
+.off {
+    opacity: 0;
+}
+
+.main {
+    background: url(../images/bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.far {
+    color: white;
+    border: 1px solid white;
+    margin-right: 1px;
+    padding: 5px;
+    border-radius: 25%;
+    transition: linear 0.5s;
+}
+
+.fas {
+    font-size: 2.3rem;
+    color: white;
+}
+
+.fa-align-left,
+.fa-times {
+    margin-left: 2%;
+    margin-top: 2%;
+}
+
+.fa-times {
+    position: absolute;
+    z-index: 40;
+}
+
+.fa-city {
+    position: absolute;
+    top: 1%;
+    right: 10%;
+}
+
+.fa-map-marker-alt {
+    position: absolute;
+    top: 1%;
+    right: 2%;
+}
+
+.fa-search {
+    position: absolute;
+    top: -5%;
+    left: 25%;
+    transition: 0.5s ease;
+    transform: translateX(-50%);
+}
+
+.search {
+    position: absolute;
+    top: -5%;
+    left: 52%;
+    display: flex;
+    justify-content: center;
+    transform: translateX(-50%);
+    transition: 0.5s ease;
+    border-radius: 10px;
+    height: 30px;
+    background-color: transparent;
+    text-align: center;
+    box-shadow: none;
+    color: white;
+    border: 1px solid white;
+}
+
+input:focus {
+    outline: 0;
+}
+
+::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+.city {
+    margin-top: 10%;
+    font-size: 2rem;
+    color: white;
+}
+
+.temp {
+    font-size: 3rem;
+    color: white;
+}
+
+.city,
+.smaller,
+.small,
+.temp {
+    margin-bottom: 3.5%;
+    margin-left: 2%;
+    color: white;
+}
+
+.small {
+    font-size: 1rem;
+}
+
+.smaller {
+    font-size: 0.9rem;
+}
+
+.weatherBar,
+.stats {
+    display: flex;
+    margin: 0 auto;
+}
+
+.weatherBar {
+    margin-top: 15%;
+    margin-bottom: 5%;
+    width: 200vw;
+
+}
+
+.weatherBar>* {
+    flex-basis: 25%;
+    background-color: rgba(0, 6, 24, 0.4);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    color: white;
+    border-top: 1px solid rgba(255, 255, 255, .5);
+    border-bottom: 1px solid rgba(255, 255, 255, .5);
+    font-size: 0.85rem;
+}
+
+.weatherBar>*>* {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.stats>* {
+    flex-basis: 33.33%;
+    background-color: rgba(0, 6, 24, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, .5);
+    border-bottom: 1px solid rgba(255, 255, 255, .5);
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.stats>*>* {
+    margin-top: 3%;
+    margin-bottom: 3%;
+}
+
+.bars {
+    width: 100%;
+    position: relative;
+}
+
+.barBg {
+    width: 100%;
+    height: 6px;
+    background-color: white;
+}
+
+.bar {
+    width: 40%;
+    background-color: red;
+    height: 6px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+
+.extraStatsActive {
+    right: 0;
+}
+
+.searchActive {
+    top: 1%;
+}
