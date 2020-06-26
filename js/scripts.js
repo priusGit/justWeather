@@ -5,8 +5,11 @@ var locate = document.querySelector(".fa-map-marker-alt");
 var menu = document.querySelector(".extraStats");
 var search = document.querySelector(".search");
 var loupe = document.querySelector(".fa-search");
+var arrowLeft = document.querySelector(".fa-arrow-circle-left");
+var arrowRight = document.querySelector(".fa-arrow-circle-right");
 var itemPicker;
 var hourPicker;
+var localisationCords = [];
 var stylesheet = document.styleSheets[0];
 var weatherSlider = [
     document.querySelector(".weatherItem1").children,
@@ -19,12 +22,22 @@ var weatherSlider = [
     document.querySelector(".weatherItem8").children
 ];
 let j;
-let weather, future;
+let weather, future, citys;
 let lat, lon;
 bars.addEventListener("click", function () {
     bars.classList.toggle("off");
     close.classList.toggle("off");
     menu.classList.toggle("extraStatsActive");
+})
+arrowLeft.addEventListener("click", function () {
+    arrowLeft.classList.toggle("off");
+    arrowRight.classList.toggle("off");
+    stylesheet.cssRules[21].style.transform = "translate(0,0)";
+})
+arrowRight.addEventListener("click", function () {
+    arrowLeft.classList.toggle("off");
+    arrowRight.classList.toggle("off");
+    stylesheet.cssRules[21].style.transform = "translate(-50%,0)";
 })
 close.addEventListener("click", function () {
     bars.classList.toggle("off");
@@ -110,6 +123,8 @@ async function startUp() {
     textChanger(future, 3, 12);
     textChanger(future, 4, 15);
     textChanger(future, 5, 18);
+    textChanger(future, 6, 21);
+    textChanger(future, 7, 24);
 }
 startUp();
 //function to change stuff in weatherBar
@@ -171,3 +186,57 @@ loupe.addEventListener("click", async function () {
     textChanger(future, 4, 15);
     textChanger(future, 5, 18);
 })
+locate.addEventListener("click", async function () {
+    await locateButtonFetch();
+})
+async function getLongAndLat() {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+}
+
+var onSuccess = function (position) {
+    localisationCords[0] = position.coords.latitude;
+    localisationCords[1] = position.coords.longitude;
+};
+
+function onError(error) {
+    alert('Error: ' + error.message);
+}
+const locateButtonFetch = async () => {
+    await getLongAndLat();
+    link = "https://api.openweathermap.org/data/2.5/onecall?lat=" + localisationCords[0] + "&lon=" + localisationCords[1] + "&exclude=daily&appid=6301f16c27be5c2dadd4ba2f11f1b761&units=metric";
+    await fetch(link)
+        .then((resp) => resp.json())
+        .then(function (data) {
+            future = data;
+            console.log(future);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    document.querySelector(".city").innerHTML = weather.name;
+    document.querySelector(".temp").innerHTML = future.current.temp + "°C";
+    document.querySelector(".sky").innerHTML = future.current.weather[0].main;
+    document.querySelector(".skySmall").innerHTML = future.current.weather[0].description;
+    document.querySelector(".bar1").innerHTML = future.current.humidity + "%";
+    document.querySelector(".bar2").innerHTML = future.current.pressure + " hPa";
+    document.querySelector(".bar3").innerHTML = future.current.clouds + "%";
+    stylesheet.cssRules[29].style.width = future.current.humidity + "%";
+    stylesheet.cssRules[30].style.width = (future.current.pressure - 965) * 100 / 89 + "%";
+    stylesheet.cssRules[31].style.width = future.current.clouds + "%";
+    textChanger(future, 0, 3);
+    textChanger(future, 1, 6);
+    textChanger(future, 2, 9);
+    textChanger(future, 3, 12);
+    textChanger(future, 4, 15);
+    textChanger(future, 5, 18);
+    link = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + localisationCords[0] + "," + localisationCords[1] + "&sensor=true&key=AIzaSyBXZ-eYwr57hvckL0FZu_h4ER2pgBKp8JY";
+    await fetch(link)
+        .then((resp) => resp.json())
+        .then(function (data) {
+            citys = data;
+            console.log(citys);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}

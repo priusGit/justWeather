@@ -137,13 +137,15 @@ input:focus {
 .stats {
     display: flex;
     margin: 0 auto;
+
 }
 
 .weatherBar {
     margin-top: 15%;
     margin-bottom: 5%;
     width: 200vw;
-
+    transform: translate(0%, 0%);
+    transition: 0.5s ease-in;
 }
 
 .weatherBar>* {
@@ -232,6 +234,7 @@ input:focus {
 .fa-arrow-circle-left {
     position: absolute;
     font-size: 3rem;
+    transition: 0.2s linear;
 }
 
 .fa-arrow-circle-right {
@@ -242,4 +245,9 @@ input:focus {
 .fa-arrow-circle-left {
     left: 2%;
     top: 45%;
+}
+
+
+.none {
+    display: none;
 }
