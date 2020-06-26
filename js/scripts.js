@@ -186,12 +186,13 @@ loupe.addEventListener("click", async function () {
     textChanger(future, 4, 15);
     textChanger(future, 5, 18);
 })
-locate.addEventListener("click", async function () {
-    await locateButtonFetch();
-})
-async function getLongAndLat() {
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+
+function getLongAndLat() {
+    return new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+    );
 }
+
 
 var onSuccess = function (position) {
     localisationCords[0] = position.coords.latitude;
@@ -202,41 +203,50 @@ function onError(error) {
     alert('Error: ' + error.message);
 }
 const locateButtonFetch = async () => {
-    await getLongAndLat();
-    link = "https://api.openweathermap.org/data/2.5/onecall?lat=" + localisationCords[0] + "&lon=" + localisationCords[1] + "&exclude=daily&appid=6301f16c27be5c2dadd4ba2f11f1b761&units=metric";
-    await fetch(link)
-        .then((resp) => resp.json())
-        .then(function (data) {
-            future = data;
-            console.log(future);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    document.querySelector(".city").innerHTML = weather.name;
-    document.querySelector(".temp").innerHTML = future.current.temp + "°C";
-    document.querySelector(".sky").innerHTML = future.current.weather[0].main;
-    document.querySelector(".skySmall").innerHTML = future.current.weather[0].description;
-    document.querySelector(".bar1").innerHTML = future.current.humidity + "%";
-    document.querySelector(".bar2").innerHTML = future.current.pressure + " hPa";
-    document.querySelector(".bar3").innerHTML = future.current.clouds + "%";
-    stylesheet.cssRules[29].style.width = future.current.humidity + "%";
-    stylesheet.cssRules[30].style.width = (future.current.pressure - 965) * 100 / 89 + "%";
-    stylesheet.cssRules[31].style.width = future.current.clouds + "%";
-    textChanger(future, 0, 3);
-    textChanger(future, 1, 6);
-    textChanger(future, 2, 9);
-    textChanger(future, 3, 12);
-    textChanger(future, 4, 15);
-    textChanger(future, 5, 18);
-    link = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + localisationCords[0] + "," + localisationCords[1] + "&sensor=true&key=AIzaSyBXZ-eYwr57hvckL0FZu_h4ER2pgBKp8JY";
-    await fetch(link)
-        .then((resp) => resp.json())
-        .then(function (data) {
-            citys = data;
-            console.log(citys);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    try {
+        let position = await getLongAndLat(),
+            {
+                coords
+            } = position,
+            url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + coords.latitude + "&lon=" + coords.longitude + "&exclude=daily&appid=6301f16c27be5c2dadd4ba2f11f1b761&units=metric";
+        await fetch(url)
+            .then(resp => resp.json())
+            .then(data => {
+                let future = data;
+                console.log(future);
+                document.querySelector(".city").innerHTML = weather.name;
+                document.querySelector(".temp").innerHTML = future.current.temp + "°C";
+                document.querySelector(".sky").innerHTML = future.current.weather[0].main;
+                document.querySelector(".skySmall").innerHTML = future.current.weather[0].description;
+                document.querySelector(".bar1").innerHTML = future.current.humidity + "%";
+                document.querySelector(".bar2").innerHTML = future.current.pressure + " hPa";
+                document.querySelector(".bar3").innerHTML = future.current.clouds + "%";
+                stylesheet.cssRules[29].style.width = future.current.humidity + "%";
+                stylesheet.cssRules[30].style.width = (future.current.pressure - 965) * 100 / 89 + "%";
+                stylesheet.cssRules[31].style.width = future.current.clouds + "%";
+                textChanger(future, 0, 3);
+                textChanger(future, 1, 6);
+                textChanger(future, 2, 9);
+                textChanger(future, 3, 12);
+                textChanger(future, 4, 15);
+                textChanger(future, 5, 18);
+
+                link = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords.latitude + "," + coords.longitude + "&sensor=true&key=AIzaSyBXZ-eYwr57hvckL0FZu_h4ER2pgBKp8JY";
+                fetch(link)
+                    .then((resp) => resp.json())
+                    .then(function (data) {
+                        citys = data;
+                        console.log(citys);
+                        document.querySelector(".city").innerHTML = citys.results[0].address_components[4].long_name;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+            .catch(e => console.log(error));
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
 }
+
+locate.addEventListener("click", locateButtonFetch);
