@@ -55,7 +55,7 @@ var weekDays = [
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday"
+    "Sunday",
 ]
 
 function addZero(insert) {
@@ -135,7 +135,8 @@ function textChanger(future, itemPicker, hourPicker) {
     let weatherItemunix = future.hourly[weatherItemIndex].dt;
     let dateItem = new Date(weatherItemunix * 1000);
     var weekDay = dateItem.getDay();
-    var weekDayName = weekDays[weekDay - 1 % 7];
+    var weekDayName = weekDays[weekDay % 7];
+    console.log(" " + weekDay + " " + weekDayName + " " + dateItem);
     hour = dateItem.getHours();
     var day = dateItem.getDate();
     var month = dateItem.getMonth();
