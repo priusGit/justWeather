@@ -68,7 +68,7 @@ function addZero(insert) {
 function timer() {
     var date = new Date();
     var weekDay = date.getDay();
-    var weekDayName = weekDays[weekDay - 1 % 7];
+    var weekDayName = weekDays[weekDay% 7];
     var hour = date.getHours();
     var minute = date.getMinutes();
     var second = date.getSeconds();
