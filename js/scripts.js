@@ -148,7 +148,7 @@ function textChanger(future, itemPicker, hourPicker) {
     weatherSlider[itemPicker][1].innerHTML = hour + ":00";
     weatherSlider[itemPicker][2].innerHTML = weekDayName;
     weatherSlider[itemPicker][3].innerHTML = future.hourly[weatherItemIndex].temp + "°C";
-    weatherSlider[itemPicker][4].src = "http://openweathermap.org/img/wn/" + future.hourly[weatherItemIndex].weather[0].icon + "@2x.png";
+    weatherSlider[itemPicker][4].src = "https://openweathermap.org/img/wn/" + future.hourly[weatherItemIndex].weather[0].icon + "@2x.png";
 }
 loupe.addEventListener("click", async function () {
     searcher();
