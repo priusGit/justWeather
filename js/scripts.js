@@ -65,26 +65,6 @@ function addZero(insert) {
     return insert;
 }
 
-function timer() {
-    var date = new Date();
-    var weekDay = date.getDay();
-    var weekDayName = weekDays[weekDay - 1 % 7];
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
-    var day = date.getDate();
-    var month = date.getMonth();
-    var year = date.getFullYear();
-    hour = addZero(hour);
-    minute = addZero(minute);
-    second = addZero(second);
-    month = addZero(month);
-    day = addZero(day);
-    var time = weekDayName + " " + day + "." + month + "." + year + ", " + hour + ":" + minute + ":" + second;
-    document.querySelector(".clock").innerHTML = time;
-    setTimeout(timer, 1000);
-}
-timer();
 
 async function startUp() {
     let url = "https://api.openweathermap.org/data/2.5/weather?q=Warszawa&appid=6301f16c27be5c2dadd4ba2f11f1b761&units=metric";
@@ -127,6 +107,28 @@ async function startUp() {
     textChanger(future, 7, 24);
 }
 startUp();
+
+function timer(weather) {
+    var date = new Date();
+    var weekDay = date.getDay();
+    var weekDayName = weekDays[weekDay % 7];
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    var day = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    hour = addZero(hour);
+    minute = addZero(minute);
+    second = addZero(second);
+    month = addZero(month);
+    day = addZero(day);
+    var time = weekDayName + " " + day + "." + month + "." + year + ", " + hour + ":" + minute + ":" + second;
+    document.querySelector(".clock").innerHTML = time;
+    setTimeout(timer, 1000);
+}
+timer(weather);
+
 //function to change stuff in weatherBar
 function textChanger(future, itemPicker, hourPicker) {
     let date = new Date();
@@ -136,7 +138,6 @@ function textChanger(future, itemPicker, hourPicker) {
     let dateItem = new Date(weatherItemunix * 1000);
     var weekDay = dateItem.getDay();
     var weekDayName = weekDays[weekDay % 7];
-    console.log(" " + weekDay + " " + weekDayName + " " + dateItem);
     hour = dateItem.getHours();
     var day = dateItem.getDate();
     var month = dateItem.getMonth();
@@ -150,6 +151,16 @@ function textChanger(future, itemPicker, hourPicker) {
     weatherSlider[itemPicker][4].src = "http://openweathermap.org/img/wn/" + future.hourly[weatherItemIndex].weather[0].icon + "@2x.png";
 }
 loupe.addEventListener("click", async function () {
+    searcher();
+})
+search.addEventListener("keydown", async function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        searcher();
+    }
+})
+
+async function searcher() {
     let url = "https://api.openweathermap.org/data/2.5/weather?q=" + search.value + "&appid=6301f16c27be5c2dadd4ba2f11f1b761&units=metric";
     await fetch(url)
         .then((resp) => resp.json())
@@ -186,7 +197,7 @@ loupe.addEventListener("click", async function () {
     textChanger(future, 3, 12);
     textChanger(future, 4, 15);
     textChanger(future, 5, 18);
-})
+}
 
 function getLongAndLat() {
     return new Promise((resolve, reject) =>
@@ -214,7 +225,6 @@ const locateButtonFetch = async () => {
             .then(resp => resp.json())
             .then(data => {
                 let future = data;
-                console.log(future);
                 document.querySelector(".city").innerHTML = weather.name;
                 document.querySelector(".temp").innerHTML = future.current.temp + "°C";
                 document.querySelector(".sky").innerHTML = future.current.weather[0].main;
@@ -237,7 +247,6 @@ const locateButtonFetch = async () => {
                     .then((resp) => resp.json())
                     .then(function (data) {
                         citys = data;
-                        console.log(citys);
                         document.querySelector(".city").innerHTML = citys.results[0].address_components[4].long_name;
                     })
                     .catch(function (error) {
